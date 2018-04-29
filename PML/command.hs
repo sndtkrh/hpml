@@ -1,4 +1,4 @@
-module PML.Command(Command(Q), Proved(Proved), run, cparse, emptyEnv) where
+module PML.Command(Command(Q, Comment), Proved(Proved), run, cparse, emptyEnv) where
 import qualified Data.Char as Char
 import qualified Data.Map as Map
 import qualified Data.List as List
@@ -16,6 +16,7 @@ data Command
   | G Indicator
   | Name Indicator String
   | Q
+  | Comment String
   deriving (Show)
 
 data Proved = Proved [Formula] (Map.Map String Formula) deriving (Show)
@@ -35,7 +36,7 @@ cparse' s = map
   (\ (prefix,f) -> case List.stripPrefix prefix s of
     Just s' -> f s'
     Nothing -> Nothing )
-  [("Axiom",axiom), ("MP", mp), ("US", us), ("G", gn), ("Name", name), ("Q", quit)]
+  [("Axiom",axiom), ("MP", mp), ("US", us), ("G", gn), ("Name", name), ("Q", quit), ("//", comment)]
 
 axiom :: String -> Maybe Command
 axiom s = case Parser.formula (Parser.skipSpaces s) of
@@ -74,6 +75,9 @@ name s = case indicator s of
 
 quit :: String -> Maybe Command
 quit s = if null $ Parser.skipSpaces s then return Q else Nothing
+
+comment :: String -> Maybe Command
+comment = return . Comment
 
 indicator :: String -> Maybe (Indicator, String)
 indicator (' ':s) = indicator s
@@ -122,6 +126,7 @@ run (Name f s) env@(Proved thms m)
       (Just _) -> Nothing
     _ -> Nothing
 run Q _ = Nothing
+run (Comment _) _ = Nothing
 
 getFormula :: Indicator -> Proved -> Maybe Formula
 getFormula IPre (Proved (f:_) _) = return f

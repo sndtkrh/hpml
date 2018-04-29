@@ -11,9 +11,9 @@ interactive env = do
   putStr ">> "
   cstr <- getLine
   let mc = cparse cstr
-  print mc
   case mc of
     Just Q -> putStrLn "Quit."
+    Just (Comment _) -> interactive env
     Just c -> case run c env of
       Just env'@(Proved thms _) -> do
         putStrLn $ "#" ++ show (length thms - 1) ++ " |- " ++ show (head thms)

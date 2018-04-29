@@ -5,7 +5,6 @@ import PML.Formula
 -- [](p->q)->([]p->[]q)
 axiomK :: Formula
 axiomK = Imply (Box (Imply (Var "p") (Var "q"))) (Imply (Box (Var "p")) (Box (Var "q")) )
-
 -- <>p<->~[]~p
 axiomDualD :: Formula
 axiomDualD = Equiv (Diamond (Var "p")) (Not (Box (Not (Var "p"))))
