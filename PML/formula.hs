@@ -3,8 +3,9 @@ module PML.Formula where
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
+newtype VariableIdentifier = VariableIdentifier String deriving (Show,Eq,Ord)
 data Formula
-  = Var String
+  = Var VariableIdentifier
   | Top
   | Bottom
   | Not Formula
@@ -17,7 +18,7 @@ data Formula
   deriving (Eq)
 
 instance Show Formula where
-  show (Var s) = s
+  show (Var (VariableIdentifier s)) = s
   show Top = "T"
   show Bottom = "F"
   show (Not f) = '~' : show f
@@ -44,7 +45,7 @@ isPropositionalFormula (And f g)
 isPropositionalFormula (Or f g)
   = isPropositionalFormula f && isPropositionalFormula g
 
-getPropositionalLetters :: Formula -> Set.Set String
+getPropositionalLetters :: Formula -> Set.Set VariableIdentifier
 getPropositionalLetters f = case f of
   Var p -> Set.singleton p
   Top -> Set.empty
@@ -57,9 +58,9 @@ getPropositionalLetters f = case f of
   (And g h) -> Set.union (getPropositionalLetters g) (getPropositionalLetters h)
   (Or g h) -> Set.union (getPropositionalLetters g) (getPropositionalLetters h)
 
-eval :: Formula -> Map.Map String Bool -> Maybe Bool
+eval :: Formula -> Map.Map VariableIdentifier Bool -> Maybe Bool
 eval f v = case f of
-  Var p -> Map.lookup p v
+  (Var p) -> Map.lookup p v
   Top -> return True
   Bottom -> return False
   (Not g) -> do
@@ -93,10 +94,10 @@ isTautology f = foldl (\ a b -> (&&) <$> a <*> b) (pure True) $ map (isTautology
     ls' = l : map update ls'
     ls = take (2 ^ n) ls'
 
-isTautology' :: Formula -> [(String,Bool)] -> Maybe Bool
+isTautology' :: Formula -> [(VariableIdentifier,Bool)] -> Maybe Bool
 isTautology' f m = eval f $ Map.fromList m
 
-update :: [(String,Bool)] -> [(String,Bool)]
+update :: [(VariableIdentifier,Bool)] -> [(VariableIdentifier,Bool)]
 update ((s,True):m) = (s,False) : update m
 update ((s,False):m) = (s,True) : m
 update [] = []

@@ -6,7 +6,7 @@ modusPonens :: Formula -> Formula -> Maybe Formula
 modusPonens f (Imply f' g') = if f == f' then return g' else Nothing
 modusPonens _ _ = Nothing
 
-uniformSubstitute :: Formula -> Formula -> String -> Formula
+uniformSubstitute :: Formula -> Formula -> VariableIdentifier -> Formula
 uniformSubstitute f g p
   = case f of
     q@(Var s) -> if s == p then g else q
@@ -31,6 +31,6 @@ gn :: Maybe Formula -> Maybe Formula
 gn (Just f) = generalize f
 gn _ = Nothing
 
-us :: Maybe Formula -> Maybe Formula -> String -> Maybe Formula
+us :: Maybe Formula -> Maybe Formula -> VariableIdentifier -> Maybe Formula
 us (Just f) (Just g) s = return $ uniformSubstitute f g s
 us _ _ _ = Nothing

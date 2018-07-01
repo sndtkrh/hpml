@@ -116,7 +116,7 @@ run (G f) env@(Proved thms m)
     (Just f') -> return $ Proved (f':thms) m
     Nothing -> Nothing
 run (US f g' p) env@(Proved thms m)
-  = case Rule.us (getFormula f env) (Just g') p of
+  = case Rule.us (getFormula f env) (Just g') (VariableIdentifier p) of
     (Just f') -> return $ Proved (f':thms) m
     Nothing -> Nothing
 run (Name f s) env@(Proved thms m)

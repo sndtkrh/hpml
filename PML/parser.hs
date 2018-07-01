@@ -52,7 +52,7 @@ subformula s = let (varname, s') = var s in
     [] -> Nothing
     "T" -> return $ ParseState s' Top
     "F" -> return $ ParseState s' Bottom
-    _ -> return $ ParseState s' $ Var varname
+    _ -> return $ ParseState s' $ Var $ VariableIdentifier varname
 
 var :: String -> (String, String)
 var = var' ""
