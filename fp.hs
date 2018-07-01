@@ -2,7 +2,7 @@ import System.IO
 import Control.Monad as M
 import PML.Parser
 import PML.Formulaproperties
-import PML.Formula
+import PML.StandardTranslation as ST
 
 main :: IO ()
 main = do
@@ -18,7 +18,8 @@ interactive = do
     (Just f) -> do
       putStrLn "OK."
       putStrLn $ "The properties of " ++ show f
-      M.when (isPositive' f $ VariableIdentifier "p") $ putStrLn "Positive."
+      putStrLn $ "Standard translation for model is " ++ show (ST.modelST f)
+      M.when (isPositive f) $ putStrLn "Positive."
       M.when (isNegative f) $ putStrLn "Negative."
       M.when (isVerySimpleShalqvist f) $ putStrLn "Very simple Shalqvist formula."
       interactive

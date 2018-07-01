@@ -3,7 +3,10 @@ module PML.Formula where
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
-newtype VariableIdentifier = VariableIdentifier String deriving (Show,Eq,Ord)
+newtype VariableIdentifier = VariableIdentifier String deriving (Eq,Ord)
+instance Show VariableIdentifier where
+  show (VariableIdentifier s) = s
+
 data Formula
   = Var VariableIdentifier
   | Top
@@ -18,7 +21,7 @@ data Formula
   deriving (Eq)
 
 instance Show Formula where
-  show (Var (VariableIdentifier s)) = s
+  show (Var p) =  show p
   show Top = "T"
   show Bottom = "F"
   show (Not f) = '~' : show f
