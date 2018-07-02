@@ -18,10 +18,11 @@ interactive = do
     (Just f) -> do
       putStrLn "OK."
       putStrLn $ "The properties of " ++ show f
-      putStrLn $ "Standard translation for model is " ++ show (ST.modelST f)
-      M.when (isPositive f) $ putStrLn "Positive."
-      M.when (isNegative f) $ putStrLn "Negative."
-      M.when (isVerySimpleShalqvist f) $ putStrLn "Very simple Shalqvist formula."
+      putStrLn $ " - Standard translation for model is " ++ show (ST.modelST f)
+      putStrLn $ " - Standard translation for frame is " ++ show (ST.frameST f)
+      M.when (isPositive f) $ putStrLn " - Positive."
+      M.when (isNegative f) $ putStrLn " - Negative."
+      M.when (isVerySimpleShalqvist f) $ putStrLn " - Very simple Shalqvist formula."
       interactive
     Nothing -> do
       putStrLn "ERROR"

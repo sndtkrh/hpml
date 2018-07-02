@@ -38,3 +38,6 @@ instance Show Formula where
   show (Or f g) = "(" ++ show f ++ "∨" ++ show g ++ ")"
   show (Exists x f) = "∃" ++ show x ++ "(" ++ show f ++ ")"
   show (Forall x f) = "∀" ++ show x ++ "(" ++ show f ++ ")"
+
+basicrel :: RelationIdentifier
+basicrel = RelationIdentifier "R"
